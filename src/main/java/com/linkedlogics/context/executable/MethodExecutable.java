@@ -4,6 +4,7 @@ import com.linkedlogics.LogicContext;
 import com.linkedlogics.annotation.AsyncLogic;
 import com.linkedlogics.annotation.ContextParam;
 import com.linkedlogics.annotation.InputParam;
+import com.linkedlogics.annotation.Logic;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.util.ReflectionUtils;
 
@@ -15,7 +16,7 @@ import java.util.*;
 public class MethodExecutable implements LogicExecutable {
     private Object object ;
     private Method method ;
-    private String returns ;
+    private String returnAs ;
 
     private MethodParameter[] values ;
     private DefaultValue[] defaultValues ;
@@ -55,6 +56,11 @@ public class MethodExecutable implements LogicExecutable {
                 }
             }
         }
+
+        Logic logic = this.method.getAnnotation(Logic.class) ;
+        if (logic.returnAs().length() > 0) {
+            this.returnAs = logic.returnAs() ;
+        }
     }
 
     @Override
@@ -80,7 +86,7 @@ public class MethodExecutable implements LogicExecutable {
             if (result instanceof Map) {
                 return Optional.of((Map<String, Object>) result) ;
             } else {
-                String key = returns == null ? result.getClass().getSimpleName().toLowerCase() : returns ;
+                String key = returnAs == null ? result.getClass().getSimpleName().toLowerCase() : returnAs ;
                 return Optional.of(new HashMap<>() {{
                    put(key, result) ;
                 }});

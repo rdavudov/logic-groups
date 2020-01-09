@@ -20,6 +20,8 @@ public class Result {
     private String errorMessage ;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, Object> exported ;
+    @JsonIgnore
+    private Throwable exception ;
 
     public Result() {
 
@@ -29,12 +31,14 @@ public class Result {
         isSuccess = false ;
         errorCode = exception.getErrorCode() ;
         errorMessage = exception.getErrorMessage() ;
+        this.exception = exception ;
     }
 
     public Result(Throwable exception) {
         isSuccess = false ;
         errorCode = -1L ;
         errorMessage = exceptionToString(exception) ;
+        this.exception = exception ;
     }
 
     public static String exceptionToString(Throwable e) {

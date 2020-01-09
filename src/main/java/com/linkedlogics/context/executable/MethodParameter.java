@@ -25,7 +25,7 @@ public class MethodParameter {
         this.type = type ;
         this.source = source ;
         this.isRequired = isRequired;
-        this.defaultValue = defaultValue.trim().length() > 0 ? defaultValue : null ;
+        this.defaultValue = defaultValue != null && defaultValue.trim().length() > 0 ? defaultValue : null ;
     }
 
     protected Object value(LogicContext context) {

@@ -10,5 +10,5 @@ import java.lang.annotation.*;
 public @interface Logic {
     String value() default "";
 
-    String returns() default "" ;
+    String returnAs() default "" ;
 }

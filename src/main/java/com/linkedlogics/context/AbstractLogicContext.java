@@ -12,11 +12,14 @@ import com.linkedlogics.exception.LogicException;
 import com.linkedlogics.exception.MissingLogicException;
 import com.linkedlogics.exception.MissingLogicGroupException;
 import com.linkedlogics.flow.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.stream.Stream;
 
+
+@Slf4j
 public abstract class AbstractLogicContext implements LogicContext, ExecutableContext {
     /**
      * Auto generated context id
@@ -79,9 +82,11 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
 
     private Set<String> tags = new HashSet<>() ;
 
+    private LogicFlowManager flowManager ;
+
     @Autowired
     public AbstractLogicContext(LogicFlowManager flowManager) {
-        this.flow = flowManager.getFlow() ;
+        this.flowManager = flowManager ;
     }
 
     /**
@@ -255,6 +260,8 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
 
         try {
             if (itemStack.isEmpty()) {
+                this.flow = flowManager.getFlow() ;
+
                 if (entry != null) {
                     if (flow.getRoot() instanceof LogicGroup) {
                         LogicGroup logicGroup = ((LogicGroup) flow.getRoot()).find(entry, namespace) ;
@@ -302,6 +309,7 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
             Optional<LogicExecutable> executable = flow.getLogic(getNamespaced(undoItem)) ;
 
             if (executable.isPresent()) {
+                log.info("executing undo {}@{}", undoItem.getUndo(), undoItem.getName());
                 Optional<Map<String, Object>> logicResult = executeLogic(undoItem, executable.get()) ;
             }
         }
@@ -316,7 +324,7 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
         LogicGroup group = itemStack.peek();
         ListIterator<LogicItem> iterator = iteratorStack.peek();
         Result result = new Result();
-
+        log.info("executing group {}", group.getName());
         item:
         while (iterator.hasNext()) {
             LogicItem item = iterator.next();
@@ -335,6 +343,7 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
 
                 if (executable.isPresent()) {
                     try {
+                        log.info("executing logic {}", item.getName());
                         Optional<Map<String, Object>> logicResult = executeLogic(item, executable.get()) ;
 
                         if (logicResult.isPresent()) {
@@ -428,5 +437,7 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
         tags.clear();
         contextId = UUID.randomUUID().toString() ;
         contextTime = System.currentTimeMillis() ;
+        setCancelled(false);
+        setBroken(false);
     }
 }

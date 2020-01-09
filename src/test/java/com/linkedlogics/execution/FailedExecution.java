@@ -2,8 +2,10 @@ package com.linkedlogics.execution;
 
 import com.linkedlogics.Application;
 import com.linkedlogics.LogicContextManager;
+import com.linkedlogics.LogicFlowManager;
 import com.linkedlogics.context.AbstractLogicContext;
 import com.linkedlogics.context.Result;
+import com.linkedlogics.core.DefaultFlowManager;
 import com.linkedlogics.core.DefaultLogicGroupBuilder;
 import com.linkedlogics.flow.LogicFailure;
 import com.linkedlogics.flow.LogicFlags;
@@ -20,6 +22,8 @@ public class FailedExecution {
 
     @Autowired
     private LogicContextManager contextManager ;
+    @Autowired
+    private LogicFlowManager flowManager ;
 
     @Test
     public void basicFailure() {
@@ -30,11 +34,11 @@ public class FailedExecution {
                 .logic("error2", "error").input("error_code", 1L).input("error_message", "error").high()
                 .logic("add3", "add").input("item", "item3")
                 .build() ;
-        
+        ((DefaultFlowManager) flowManager).create(root) ;
 
         AbstractLogicContext context = (AbstractLogicContext) contextManager.newContext() ;
         context.setContextParam("list", new ArrayList<>());
-        Result result = context.executeGroup(root) ;
+        Result result = context.execute() ;
         System.out.println(context.getContextParam("list"));
         assert !result.isSuccess() ;
         assert context.getContextParam("list") != null ;
@@ -65,11 +69,11 @@ public class FailedExecution {
                 .logic("add9", "add").input("item", "item9")
                 .finish()
                 .build() ;
-        
+        ((DefaultFlowManager) flowManager).create(root) ;
 
         AbstractLogicContext context = (AbstractLogicContext) contextManager.newContext() ;
         context.setContextParam("list", new ArrayList<>());
-        Result result = context.executeGroup(root) ;
+        Result result = context.execute() ;
         System.out.println(context.getContextParam("list"));
         assert !result.isSuccess() ;
         assert context.getContextParam("list") != null ;
@@ -100,11 +104,11 @@ public class FailedExecution {
                 .logic("add9", "add").input("item", "item9")
                 .finish()
                 .build() ;
-        
+        ((DefaultFlowManager) flowManager).create(root) ;
 
         AbstractLogicContext context = (AbstractLogicContext) contextManager.newContext() ;
         context.setContextParam("list", new ArrayList<>());
-        Result result = context.executeGroup(root) ;
+        Result result = context.execute() ;
         System.out.println(context.getContextParam("list"));
         assert result.isSuccess() ;
         assert context.getContextParam("list") != null ;
@@ -134,11 +138,11 @@ public class FailedExecution {
                 .logic("add9", "add").input("item", "item9")
                 .finish()
                 .build() ;
-        
+        ((DefaultFlowManager) flowManager).create(root) ;
 
         AbstractLogicContext context = (AbstractLogicContext) contextManager.newContext() ;
         context.setContextParam("list", new ArrayList<>());
-        Result result = context.executeGroup(root) ;
+        Result result = context.execute() ;
         System.out.println(context.getContextParam("list"));
         assert result.isSuccess() ;
         assert context.getContextParam("list") != null ;
