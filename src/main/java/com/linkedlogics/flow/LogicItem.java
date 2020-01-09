@@ -33,6 +33,7 @@ public class LogicItem {
     protected Set<String> tags = new HashSet<>();
     protected Set<String> untags = new HashSet<>();
     protected Set<String> iftags = new HashSet<>();
+    protected Set<String> errortags = new HashSet<>();
 
     protected Set<String> exportedKeys ;
     protected Set<Class> exportedClasses ;
@@ -114,6 +115,14 @@ public class LogicItem {
 
         if (item.getUntags() != null) {
             setUntags(item.getUntags());
+        }
+
+        if (item.getIftags() != null) {
+            setIftags(item.getIftags());
+        }
+
+        if (item.getErrortags() != null) {
+            setErrortags(item.getErrortags());
         }
 
         if (item.getExportedClasses() != null) {

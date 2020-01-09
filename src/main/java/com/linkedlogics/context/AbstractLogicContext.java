@@ -7,10 +7,7 @@ import com.linkedlogics.context.executable.AsyncExecutable;
 import com.linkedlogics.context.executable.LogicExecutable;
 import com.linkedlogics.context.processor.LogicProcessor;
 import com.linkedlogics.context.validator.LogicValidator;
-import com.linkedlogics.exception.InvalidLogicGroupException;
-import com.linkedlogics.exception.LogicException;
-import com.linkedlogics.exception.MissingLogicException;
-import com.linkedlogics.exception.MissingLogicGroupException;
+import com.linkedlogics.exception.*;
 import com.linkedlogics.flow.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -364,8 +361,13 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
                         if (group.getSelection() == LogicSelection.executeAny) {
                             break item;
                         }
-                    } catch (LogicException e) {
-                        switch (item.getSeverity()) {
+                    } catch (Throwable e) {
+                        LogicSeverity severity = item.getSeverity() ;
+                        if (e instanceof LogicException && ((LogicException) e).getSeverity() != null) {
+                            severity = ((LogicException) e).getSeverity() ;
+                        }
+
+                        switch (severity) {
                             case low:
                                 break;
                             case medium:
@@ -379,9 +381,11 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
                             case fatal:
                                 return new Result(e) ;
                         }
+
+                        for (String errortag : item.getErrortags()) {
+                            getTags().add(errortag) ;
+                        }
                     }
-
-
                 } else {
                     throw new MissingLogicException(item.getExecute()) ;
                 }

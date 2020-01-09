@@ -27,17 +27,17 @@ public class Result {
 
     }
 
-    public Result(LogicException exception) {
-        isSuccess = false ;
-        errorCode = exception.getErrorCode() ;
-        errorMessage = exception.getErrorMessage() ;
-        this.exception = exception ;
-    }
-
     public Result(Throwable exception) {
-        isSuccess = false ;
-        errorCode = -1L ;
-        errorMessage = exceptionToString(exception) ;
+        if (exception instanceof LogicException) {
+            isSuccess = false ;
+            errorCode = ((LogicException) exception).getErrorCode() ;
+            errorMessage = ((LogicException) exception).getErrorMessage() ;
+        } else {
+            isSuccess = false ;
+            errorCode = -1L ;
+            errorMessage = exceptionToString(exception) ;
+        }
+
         this.exception = exception ;
     }
 

@@ -16,7 +16,7 @@ public class BasicActions {
         list.add(item) ;
     }
 
-    @Logic(value = "remove", returns = "removed")
+    @Logic(value = "remove", returnAs = "removed")
     public boolean remove(@ContextParam("list") List<String> list, @InputParam("item") String item) {
        return list.remove(item) ;
     }

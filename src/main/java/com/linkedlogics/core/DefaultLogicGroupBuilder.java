@@ -19,9 +19,9 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 public class DefaultLogicGroupBuilder implements LogicGroupBuilder {
-    private Stack<LogicGroup> stack = new Stack<LogicGroup>();
+    private Stack<LogicGroup> stack = new Stack<>();
     private LogicItem item ;
-    private List<String> resources = new ArrayList<String>() ;
+    private List<String> resources = new ArrayList<>() ;
     private ApplicationContext context ;
 
     public DefaultLogicGroupBuilder(String name, ApplicationContext context) {
@@ -272,6 +272,11 @@ public class DefaultLogicGroupBuilder implements LogicGroupBuilder {
     @Override
     public DefaultLogicGroupBuilder iftags(String... tags) {
         item.setIftags(Arrays.stream(tags).collect(Collectors.toSet()));
+        return this ;
+    }
+    @Override
+    public DefaultLogicGroupBuilder errortags(String... tags) {
+        item.setErrortags(Arrays.stream(tags).collect(Collectors.toSet()));
         return this ;
     }
 }
