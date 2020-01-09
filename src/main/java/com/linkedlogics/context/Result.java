@@ -12,10 +12,12 @@ import java.util.Map;
 @Data
 public class Result {
     private boolean isSuccess = true ;
+    @JsonIgnore
     private boolean isAsync = false ;
-    private long errorCode ;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long errorCode ;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String errorMessage ;
-
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, Object> exported ;
 
@@ -31,7 +33,7 @@ public class Result {
 
     public Result(Throwable exception) {
         isSuccess = false ;
-        errorCode = -1 ;
+        errorCode = -1L ;
         errorMessage = exceptionToString(exception) ;
     }
 

@@ -12,5 +12,5 @@ public @interface ContextParam {
 
     boolean required() default false;
 
-    boolean nonNull() default false ;
+    String defaultValue() default "" ;
 }

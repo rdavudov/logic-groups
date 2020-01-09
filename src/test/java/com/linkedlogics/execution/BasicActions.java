@@ -1,13 +1,12 @@
 package com.linkedlogics.execution;
 
-import com.linkedlogics.annotation.ContextParam;
-import com.linkedlogics.annotation.InputParam;
-import com.linkedlogics.annotation.Logic;
-import com.linkedlogics.annotation.LogicConfiguration;
+import com.linkedlogics.annotation.*;
 import com.linkedlogics.exception.LogicException;
 import lombok.extern.java.Log;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @LogicConfiguration
 public class BasicActions {
@@ -25,5 +24,16 @@ public class BasicActions {
     @Logic("error")
     public void error(@InputParam("error_code") Long errorCode, @InputParam("error_message") String errorMessage) {
         throw new LogicException(errorCode, errorMessage) ;
+    }
+
+    @Logic("request")
+    @AsyncLogic(timeout = 5, unit = TimeUnit.SECONDS)
+    public String request() {
+        return "test" ;
+    }
+
+    @Logic("response")
+    public void response(@ContextParam("list") List<String> list, @ContextParam("item") String item) {
+        list.add(item) ;
     }
 }

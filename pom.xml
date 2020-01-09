@@ -18,6 +18,20 @@
         <java.version>11</java.version>
     </properties>
 
+
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>localhost-releases</name>
+            <url>http://172.18.188.211:8081/artifactory/LLC</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>localhost-snapshots</name>
+            <url>http://172.18.188.211:8081/artifactory/LLC</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

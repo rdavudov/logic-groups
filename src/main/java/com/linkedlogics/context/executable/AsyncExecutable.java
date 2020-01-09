@@ -25,6 +25,8 @@ public class AsyncExecutable implements LogicExecutable {
             } else {
                 contextManager.setContext(externalId, (AbstractLogicContext) context);
             }
+        } else {
+            throw new MissingExternalIdException() ;
         }
 
         return result ;

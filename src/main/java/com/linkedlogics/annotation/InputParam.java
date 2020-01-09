@@ -12,5 +12,5 @@ public @interface InputParam {
 
     boolean required() default false;
 
-    boolean nonNull() default false ;
+    String defaultValue() default "" ;
 }

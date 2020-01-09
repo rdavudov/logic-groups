@@ -31,14 +31,13 @@ public class BasicExecution {
     @Test
     public void basicExecution() {
         LogicGroup root = new DefaultLogicGroupBuilder("group", null)
-            .logic("add1", "add").input("itema", "item1")
+            .logic("add1", "add").input("item", "item1")
             .logic("add2", "add").input("item", "item2")
             .logic("add3", "add").input("item", "item3")
             .export("list")
             .build() ;
         ((DefaultFlowManager) flowManager).create(root) ;
         AbstractLogicContext context = (AbstractLogicContext) contextManager.newContext() ;
-        context.setContextParam("list", new ArrayList<>());
         Result result = context.execute() ;
         assert result.isSuccess() ;
         assert context.getContextParam("list") != null ;

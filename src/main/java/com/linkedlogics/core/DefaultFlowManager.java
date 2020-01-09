@@ -23,9 +23,9 @@ public class DefaultFlowManager implements LogicFlowManager {
     @Autowired
     private ApplicationContext context ;
     @Autowired
-    private List<LogicConfigurer> actionConfigurers ;
+    private List<LogicConfigurer> logicConfigurers;
     @Autowired
-    private List<LogicGroupConfigurer> actionGroupConfigurers ;
+    private List<LogicGroupConfigurer> logicGroupConfigurers;
 
     @Override
     public LogicFlow getFlow() {
@@ -57,7 +57,7 @@ public class DefaultFlowManager implements LogicFlowManager {
     protected HashMap<String, LogicExecutable> getLogics(ApplicationContext applicationContext) {
         HashMap<String, LogicExecutable> actions = new HashMap<String, LogicExecutable>();
 
-        for (LogicConfigurer configurer : actionConfigurers) {
+        for (LogicConfigurer configurer : logicConfigurers) {
             actions.putAll(configurer.getLogics(applicationContext));
         }
 
@@ -67,7 +67,7 @@ public class DefaultFlowManager implements LogicFlowManager {
     public List<LogicGroup> getLogicGroups(ApplicationContext applicationContext) {
         List<LogicGroup> groups = new ArrayList<LogicGroup>() ;
 
-        for (LogicGroupConfigurer configurer : actionGroupConfigurers) {
+        for (LogicGroupConfigurer configurer : logicGroupConfigurers) {
             groups.addAll(configurer.getLogicGroups(applicationContext));
         }
 
