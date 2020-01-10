@@ -149,21 +149,6 @@ public class DefaultLogicGroupBuilder implements LogicGroupBuilder {
         return this ;
     }
 
-    public DefaultLogicGroupBuilder output(String key, Object value) {
-        if (LogicExpression.isExpression(value)) {
-            item.setOutput(key, new LogicExpression(value.toString()));
-        } else {
-            item.setOutput(key, value);
-        }
-
-        return this ;
-    }
-
-    public DefaultLogicGroupBuilder output(String key) {
-        item.setOutput(key, null);
-        return this ;
-    }
-
     public DefaultLogicGroupBuilder finish() {
         if (!stack.isEmpty()) {
             item = stack.pop();

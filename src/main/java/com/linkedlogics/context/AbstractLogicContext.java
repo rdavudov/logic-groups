@@ -361,10 +361,21 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
                         if (group.getSelection() == LogicSelection.executeAny) {
                             break item;
                         }
-                    } catch (Throwable e) {
+                    } catch (Throwable ex) {
                         LogicSeverity severity = item.getSeverity() ;
-                        if (e instanceof LogicException && ((LogicException) e).getSeverity() != null) {
-                            severity = ((LogicException) e).getSeverity() ;
+
+                        if (ex instanceof LogicException) {
+                            LogicException exception = (LogicException) ex ;
+                            if (exception.getSeverity() != null) {
+                                severity = exception.getSeverity() ;
+                            }
+
+                            exception.getParams().entrySet().stream().forEach(e -> setContextParam(e.getKey(), e.getValue()));
+                        }
+
+
+                        if (ex instanceof LogicException && ((LogicException) ex).getSeverity() != null) {
+                            severity = ((LogicException) ex).getSeverity() ;
                         }
 
                         switch (severity) {
@@ -376,15 +387,16 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
                             case high:
                                 setCancelled(true);
                                 setBroken(true);
-                                result = new Result(e) ;
+                                result = new Result(ex) ;
                                 break;
                             case fatal:
-                                return new Result(e) ;
+                                return new Result(ex) ;
                         }
 
                         for (String errortag : item.getErrortags()) {
                             getTags().add(errortag) ;
                         }
+
                     }
                 } else {
                     throw new MissingLogicException(item.getExecute()) ;

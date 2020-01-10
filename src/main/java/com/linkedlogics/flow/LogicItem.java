@@ -26,7 +26,6 @@ public class LogicItem {
     protected Map<String, Boolean> flags = new HashMap<>() ;
 
     protected Map<String, Object> inputs = new HashMap<>();
-    protected Map<String, Object> outputs = new HashMap<>();
 
     protected LogicRetry retry ;
 
@@ -45,10 +44,6 @@ public class LogicItem {
 
     public void setInput(String key, Object value) {
         inputs.put(key, value) ;
-    }
-
-    public void setOutput(String key, Object value) {
-        outputs.put(key, value) ;
     }
 
     public void setFlag(String flag, Boolean value) {
@@ -103,10 +98,6 @@ public class LogicItem {
 
         if (item.getInputs() != null && item.getInputs().size() > 0) {
             getInputs().putAll(item.getInputs());
-        }
-
-        if (item.getOutputs() != null && item.getOutputs().size() > 0) {
-            getOutputs().putAll(item.getOutputs());
         }
 
         if (item.getTags() != null) {

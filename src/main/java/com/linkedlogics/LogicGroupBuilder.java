@@ -52,10 +52,6 @@ public interface LogicGroupBuilder {
 
     LogicGroupBuilder input(String key, Object value) ;
 
-    LogicGroupBuilder output(String key, Object value) ;
-
-    LogicGroupBuilder output(String key) ;
-
     LogicGroupBuilder undo(String undo) ;
 
     LogicGroupBuilder finish() ;
@@ -97,7 +93,6 @@ public interface LogicGroupBuilder {
     default LogicGroupBuilder low() {
         return severity(LogicSeverity.low) ;
     }
-
 
     default LogicGroupBuilder ns(String namespace) {
         return namespace(namespace) ;

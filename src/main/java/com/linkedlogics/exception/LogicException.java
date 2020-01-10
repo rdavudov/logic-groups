@@ -1,14 +1,18 @@
 package com.linkedlogics.exception;
 
 import com.linkedlogics.flow.LogicSeverity;
+import lombok.Getter;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
 
+@Getter
 public class LogicException extends RuntimeException {
     private long errorCode ;
     private String errorMessage ;
     private LogicSeverity severity ;
+    private HashMap<String, Object> params = new HashMap<>();
 
     public LogicException(long errorCode, String errorMessage) {
         super(errorMessage) ;
@@ -42,16 +46,10 @@ public class LogicException extends RuntimeException {
         return errors.toString() ;
     }
 
-    public long getErrorCode() {
-        return errorCode;
-    }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public LogicSeverity getSeverity() {
-        return severity;
+    public LogicException setExceptionParam(String name, Object value) {
+        params.put(name, value) ;
+        return this ;
     }
 
     public static LogicException fatal(long errorCode, String errorMessage) {
