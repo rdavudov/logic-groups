@@ -1,11 +1,13 @@
 # linked-logics
-Chain of Responsibility Design pattern is one essential methods to develop extensible applications.
+Chain of Responsibility Design pattern is one of essential methods to develop extensible applications.
 > Avoid coupling the sender of a request to its receiver by giving more than one object a chance to handle the request. Chain the receiving objects and pass the request along the chain until an object handles it. -- Gang of Four
 
 
-Linked-Logics is a Spring based library which provides an implementation of [chain of responsibility design pattern](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern). Here there are several entities which help us to configure and run these chains. 
+Linked-Logics is a Spring based library which provides an implementation of [chain of responsibility design pattern](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern). 
 
-*Why Spring-based ?* Spring framework provides powerfull IoC and Configuration capabilities which is required features in most frameworks. And since it is very popular, we have decided to use its power for our dependency injection and configuration management. 
+**Why Spring-based ?** Spring framework provides powerfull IoC and configuration capabilities which are required features in most frameworks. And since it is very popular, we have decided to use its power for our dependency injection and configuration management. 
+
+Here are entities which are main components of framework and helps us to configure and run chains. 
 
 ### Logics
 Logics are atomic operations (actually methods) for doing specific work. Logics can be reused across execution which applies DRY principles. Logics may accept inputs and parameters and return values to be used by other logics. Also logics can alter execution flow of chain by throwing exceptions in error cases. 
@@ -13,7 +15,7 @@ Logics are atomic operations (actually methods) for doing specific work. Logics 
 ```java
 
     @Logic("add")
-    public void add(@ContextParam(value = "list") List<String> list, @InputParam(value = "item") String item) {
+    public void add(@ContextParam("list") List<String> list, @InputParam("item") String item) {
         list.add(item) ;
     }
 
@@ -21,10 +23,19 @@ Logics are atomic operations (actually methods) for doing specific work. Logics 
     public boolean remove(@ContextParam("list") List<String> list, @InputParam("item") String item) {
        return list.remove(item) ;
     } 
+    
+    @Logic("read")
+    public void error(@InputParam("file") String file) {
+        try {
+            // ... read contents of file
+        } catch (FileNotFoundException ex) {
+            throw new LogicException(-1, "file not found") ;
+        }
+    }
 ```
 
 ### Groups
-Groups are container for logics by applying extra configurability for logic and logics execution.
+Groups are containers for logics additionally applying extra configurability for logic and logics execution.
 
 ```java
 
@@ -44,7 +55,7 @@ Groups are container for logics by applying extra configurability for logic and 
 ```
 
 ### Context
-Context is an execution start point. Context is created for each request and contains all initial parameters as well as modified or appended ones. Context is responsible for correct execution of chain according to Group and Logic definitions. At the end it returns a Result object containing result of execution and additional parameters exported from execution.
+Context is an execution start point. It is created for each request and contains all initial parameters as well as modified or appended ones. Context is responsible for correct execution of chain according to Group and Logic definitions. At the end it returns a Result object containing result of execution and additional parameters exported from execution.
 
 ```java
     @Autowired
