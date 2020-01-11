@@ -238,13 +238,14 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
         this.outputs.put(key, value) ;
     }
 
-    private String getNamespaced(LogicItem item) {
+    private String getNamespaced(LogicItem item, String logic) {
         if (item.getNamespace() != null) {
-            return item.getNamespace() + "." + item.getExecute() ;
-        } else if (itemStack.peek().getNamespace() != null) {
-            return itemStack.peek().getNamespace() + "." + item.getExecute() ;
+            return item.getNamespace() + "." + logic ;
+        } else if (!itemStack.isEmpty() && itemStack.peek().getNamespace() != null) {
+            item.setNamespace(itemStack.peek().getNamespace());
+            return itemStack.peek().getNamespace() + "." + logic ;
         }
-        return item.getExecute() ;
+        return logic ;
     }
 
     /**
@@ -303,12 +304,42 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
 
         while (iterator.hasPrevious()) {
             LogicItem undoItem = iterator.previous() ;
-            Optional<LogicExecutable> executable = flow.getLogic(getNamespaced(undoItem)) ;
+            Optional<LogicExecutable> executable = flow.getLogic(getNamespaced(undoItem, undoItem.getUndo())) ;
 
             if (executable.isPresent()) {
                 log.info("executing undo {}@{}", undoItem.getUndo(), undoItem.getName());
-                Optional<Map<String, Object>> logicResult = executeLogic(undoItem, executable.get()) ;
+                prepareLogic(undoItem) ;
+                Optional<Map<String, Object>> result = executable.get().execute(this);
             }
+        }
+    }
+
+    public void prepareLogic(LogicItem item) {
+        if (!(item instanceof LogicGroup)) {
+            getInputs().clear();
+            getOutputs().clear();
+
+            getItemStack().stream().forEach(group -> {
+                // we collect all inputs from top to bottom by overwriting old one
+                group.getInputs().entrySet().forEach(e -> {
+                    if (e.getValue() instanceof LogicExpression) {
+                        getInputs().put(e.getKey(), evaluate((LogicExpression) e.getValue()));
+                    } else {
+                        getInputs().put(e.getKey(), e.getValue());
+                    }
+
+                });
+                // no need to consider group outputs because output key must be at action
+                // to be outputed since its there there is no need to duplicately define it
+            });
+
+            item.getInputs().entrySet().forEach(e -> {
+                if (e.getValue() instanceof LogicExpression) {
+                    getInputs().put(e.getKey(), evaluate((LogicExpression) e.getValue()));
+                } else {
+                    getInputs().put(e.getKey(), e.getValue());
+                }
+            });
         }
     }
 
@@ -336,7 +367,7 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
             if (item instanceof LogicGroup) {
                 result = executeGroup((LogicGroup) item) ;
             } else {
-                Optional<LogicExecutable> executable = flow.getLogic(getNamespaced(item)) ;
+                Optional<LogicExecutable> executable = flow.getLogic(getNamespaced(item, item.getExecute())) ;
 
                 if (executable.isPresent()) {
                     try {
@@ -371,12 +402,10 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
                             }
 
                             exception.getParams().entrySet().stream().forEach(e -> setContextParam(e.getKey(), e.getValue()));
+                            exception.getTags().stream().forEach(t -> getTags().add(t));
+                            exception.getUntags().stream().forEach(t -> getTags().remove(t));
                         }
 
-
-                        if (ex instanceof LogicException && ((LogicException) ex).getSeverity() != null) {
-                            severity = ((LogicException) ex).getSeverity() ;
-                        }
 
                         switch (severity) {
                             case low:
@@ -419,6 +448,7 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
 
 
     protected Optional<Map<String, Object>> executeLogic(LogicItem item, LogicExecutable executable) {
+        prepareLogic(item) ;
         Optional<Map<String, Object>> result = executable.execute(this);
 
         if (item.getUndo() != null) {

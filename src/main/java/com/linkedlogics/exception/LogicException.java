@@ -5,7 +5,9 @@ import lombok.Getter;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 
 @Getter
 public class LogicException extends RuntimeException {
@@ -13,6 +15,8 @@ public class LogicException extends RuntimeException {
     private String errorMessage ;
     private LogicSeverity severity ;
     private HashMap<String, Object> params = new HashMap<>();
+    private HashSet<String> tags = new HashSet<>() ;
+    private HashSet<String> untags = new HashSet<>() ;
 
     public LogicException(long errorCode, String errorMessage) {
         super(errorMessage) ;
@@ -49,6 +53,16 @@ public class LogicException extends RuntimeException {
 
     public LogicException setExceptionParam(String name, Object value) {
         params.put(name, value) ;
+        return this ;
+    }
+
+    public LogicException setExceptionTag(String... tags) {
+        this.tags.addAll(Arrays.asList(tags)) ;
+        return this ;
+    }
+
+    public LogicException setExceptionUntag(String... tags) {
+        this.untags.addAll(Arrays.asList(tags)) ;
         return this ;
     }
 

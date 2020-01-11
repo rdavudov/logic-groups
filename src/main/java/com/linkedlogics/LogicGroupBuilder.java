@@ -76,6 +76,10 @@ public interface LogicGroupBuilder {
 
     LogicGroupBuilder errortags(String... tags) ;
 
+    LogicGroupBuilder ifanytag(String... tags) ;
+
+    LogicGroupBuilder ifnotags(String... tags) ;
+
     LogicGroupBuilder severity(LogicSeverity severity) ;
 
     default LogicGroupBuilder fatal() {

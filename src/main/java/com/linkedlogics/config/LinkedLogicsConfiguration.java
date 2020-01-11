@@ -4,7 +4,6 @@ import com.linkedlogics.LogicContext;
 import com.linkedlogics.LogicContextFactory;
 import com.linkedlogics.LogicContextManager;
 import com.linkedlogics.LogicFlowManager;
-import com.linkedlogics.context.InputProcessor;
 import com.linkedlogics.context.processor.ExportProcessor;
 import com.linkedlogics.context.processor.LogicProcessor;
 import com.linkedlogics.context.processor.TagProcessor;
@@ -43,11 +42,6 @@ public class LinkedLogicsConfiguration {
     @Bean
     public LogicContextManager contextManager(LogicContextFactory factory) {
         return new DefaultContextManager(factory) ;
-    }
-
-    @Bean
-    public LogicValidator inputProcessor() {
-        return new InputProcessor() ;
     }
 
     @Bean

@@ -1,5 +1,6 @@
 package com.linkedlogics.execution;
 
+import com.linkedlogics.LogicContext;
 import com.linkedlogics.annotation.*;
 import com.linkedlogics.exception.LogicException;
 import lombok.extern.java.Log;
@@ -35,5 +36,15 @@ public class BasicActions {
     @Logic("response")
     public void response(@ContextParam("list") List<String> list, @ContextParam("item") String item) {
         list.add(item) ;
+    }
+
+    @Logic(value = "retry", returnAs = "retried")
+    @RetryLogic(attempts = 3, delay = 100, unit = TimeUnit.MILLISECONDS)
+    public void retry(@InputParam("retries") Integer retries, @ContextParam LogicContext context) {
+        int retried = (Integer) context.getContextParam("retried", 1) ;
+        if (retried < retries) {
+            context.setContextParam("retried", retried + 1) ;
+            throw LogicException.high(-1, "failed") ;
+        }
     }
 }

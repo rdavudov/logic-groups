@@ -33,6 +33,8 @@ public class LogicItem {
     protected Set<String> untags = new HashSet<>();
     protected Set<String> iftags = new HashSet<>();
     protected Set<String> errortags = new HashSet<>();
+    protected Set<String> ifanytag = new HashSet<>();
+    protected Set<String> ifnotags = new HashSet<>();
 
     protected Set<String> exportedKeys ;
     protected Set<Class> exportedClasses ;

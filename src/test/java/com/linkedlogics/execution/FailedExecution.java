@@ -7,7 +7,6 @@ import com.linkedlogics.context.AbstractLogicContext;
 import com.linkedlogics.context.Result;
 import com.linkedlogics.core.DefaultFlowManager;
 import com.linkedlogics.core.DefaultLogicGroupBuilder;
-import com.linkedlogics.flow.LogicFailure;
 import com.linkedlogics.flow.LogicFlags;
 import com.linkedlogics.flow.LogicGroup;
 import org.junit.jupiter.api.Test;

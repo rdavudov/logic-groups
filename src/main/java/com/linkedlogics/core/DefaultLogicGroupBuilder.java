@@ -264,4 +264,14 @@ public class DefaultLogicGroupBuilder implements LogicGroupBuilder {
         item.setErrortags(Arrays.stream(tags).collect(Collectors.toSet()));
         return this ;
     }
+    @Override
+    public DefaultLogicGroupBuilder ifanytag(String... tags) {
+        item.setIfanytag(Arrays.stream(tags).collect(Collectors.toSet()));
+        return this ;
+    }
+    @Override
+    public DefaultLogicGroupBuilder ifnotags(String... tags) {
+        item.setIfnotags(Arrays.stream(tags).collect(Collectors.toSet()));
+        return this ;
+    }
 }
