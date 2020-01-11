@@ -40,7 +40,7 @@ Groups are containers for logics additionally applying extra configurability for
 ```java
 
     @Group("group")
-    public LogicGroup activation(LogicGroupBuilder builder) throws IOException {
+    public LogicGroup group(LogicGroupBuilder builder) throws IOException {
         return builder
                 .group("group1")
                   .logic("add1", "add").input("item", "item1").undo("remove")
