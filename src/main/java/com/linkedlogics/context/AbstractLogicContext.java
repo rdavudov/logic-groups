@@ -1,6 +1,6 @@
 package com.linkedlogics.context;
 
-import com.linkedlogics.ExecutableContext;
+import com.linkedlogics.Context;
 import com.linkedlogics.LogicContext;
 import com.linkedlogics.LogicFlowManager;
 import com.linkedlogics.context.executable.AsyncExecutable;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 
 @Slf4j
-public abstract class AbstractLogicContext implements LogicContext, ExecutableContext {
+public abstract class AbstractLogicContext implements LogicContext, Context {
     /**
      * Auto generated context id
      */
@@ -419,7 +419,8 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
                                 result = new Result(ex) ;
                                 break;
                             case fatal:
-                                return new Result(ex) ;
+//                                return new Result(ex) ;
+                                throw ex;
                         }
 
                         for (String errortag : item.getErrortags()) {

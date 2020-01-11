@@ -101,4 +101,16 @@ public interface LogicGroupBuilder {
     default LogicGroupBuilder ns(String namespace) {
         return namespace(namespace) ;
     }
+
+    default LogicGroupBuilder executeall() {
+        return selection(LogicSelection.executeAll) ;
+    }
+
+    default LogicGroupBuilder executeone() {
+        return selection(LogicSelection.executeAny) ;
+    }
+
+    default LogicGroupBuilder executeany() {
+        return selection(LogicSelection.executeOne) ;
+    }
 }

@@ -1,6 +1,6 @@
 package com.linkedlogics.core;
 
-import com.linkedlogics.ExecutableContext;
+import com.linkedlogics.Context;
 import com.linkedlogics.LogicContextFactory;
 import com.linkedlogics.LogicContextManager;
 import com.linkedlogics.context.AbstractLogicContext;
@@ -26,7 +26,7 @@ public class DefaultContextManager implements LogicContextManager {
         contextMap.put(externalId, context) ;
     }
 
-    public ExecutableContext getContext(String externalId) {
+    public Context getContext(String externalId) {
         return getContext(externalId, maxWaitTime) ;
     }
 
@@ -38,7 +38,7 @@ public class DefaultContextManager implements LogicContextManager {
         return context ;
     }
 
-    public ExecutableContext getContext(String externalId, long maxWaitTime) {
+    public Context getContext(String externalId, long maxWaitTime) {
         AbstractLogicContext context = findContext(externalId) ;
         long start = System.currentTimeMillis() ;
         try {
@@ -50,11 +50,11 @@ public class DefaultContextManager implements LogicContextManager {
         return context ;
     }
 
-    public ExecutableContext newContext() {
+    public Context newContext() {
         return contextFactory.createContext() ;
     }
 
-    public ExecutableContext newContext(String contextId) {
+    public Context newContext(String contextId) {
         AbstractLogicContext context = (AbstractLogicContext) newContext() ;
         context.setContextId(contextId);
         return context ;

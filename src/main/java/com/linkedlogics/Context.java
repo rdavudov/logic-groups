@@ -2,7 +2,7 @@ package com.linkedlogics;
 
 import com.linkedlogics.context.Result;
 
-public interface ExecutableContext {
+public interface Context {
 
     Result execute() ;
 
