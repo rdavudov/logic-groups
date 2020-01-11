@@ -62,7 +62,7 @@ Context is an execution start point. It is created for each request and contains
     private LogicContextManager contextManager ;
     
     public Result execute() {
-        ExecutableContext context = contextManager.newContext() ;
+        Context context = contextManager.newContext() ;
         context.setEntry("group") ;
         return context.execute() ;
     }
