@@ -1,6 +1,6 @@
 package com.linkedlogics.context;
 
-import com.linkedlogics.Context;
+import com.linkedlogics.ExecutableContext;
 import com.linkedlogics.LogicContext;
 import com.linkedlogics.LogicFlowManager;
 import com.linkedlogics.context.executable.AsyncExecutable;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 
 @Slf4j
-public abstract class AbstractLogicContext implements LogicContext, Context {
+public abstract class AbstractLogicContext implements LogicContext, ExecutableContext {
     /**
      * Auto generated context id
      */

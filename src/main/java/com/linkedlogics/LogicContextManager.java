@@ -2,7 +2,7 @@ package com.linkedlogics;
 
 public interface LogicContextManager {
 
-    Context getContext(String externalId) ;
+    ExecutableContext getContext(String externalId) ;
 
-    Context newContext() ;
+    ExecutableContext newContext() ;
 }
