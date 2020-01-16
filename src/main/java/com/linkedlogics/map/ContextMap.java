@@ -7,10 +7,7 @@ import org.json.JSONObject;
 import org.yaml.snakeyaml.Yaml;
 
 import java.lang.reflect.Constructor;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ContextMap extends HashMap<String, Object> implements Contextual {
@@ -550,7 +547,7 @@ public class ContextMap extends HashMap<String, Object> implements Contextual {
 
     public <T> List<T> getList(String key, Class<? extends ContextMap> valueClass) {
         try {
-            List<ContextMap> list = (List<ContextMap>) get(key) ;
+            List<ContextMap> list = (List<ContextMap>) get(key, new ArrayList<>()) ;
             boolean isNotAssignable = false ;
             for (ContextMap value : list) {
                 if (!valueClass.isAssignableFrom(value.getClass())) {
