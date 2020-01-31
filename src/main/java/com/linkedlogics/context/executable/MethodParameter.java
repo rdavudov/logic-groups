@@ -18,14 +18,16 @@ public class MethodParameter {
     protected String name ;
     protected Class type ;
     protected Source source ;
+    protected boolean useAlternative ;
 
 
-    private MethodParameter(String name, Class type, Source source, boolean isRequired, String defaultValue) {
+    private MethodParameter(String name, Class type, Source source, boolean isRequired, String defaultValue, boolean useAlternative) {
         this.name = name ;
         this.type = type ;
         this.source = source ;
         this.isRequired = isRequired;
         this.defaultValue = defaultValue != null && defaultValue.trim().length() > 0 ? defaultValue : null ;
+        this.useAlternative = useAlternative ;
     }
 
     protected Object value(LogicContext context) {
@@ -34,12 +36,22 @@ public class MethodParameter {
                return context ;
            case context:
                if (name != null && name.trim().length() > 0) {
-                   return context.getContextParam(name) ;
+                   if (useAlternative) {
+                       return context.getContextParam(name, context.getInputParam(name)) ;
+                   } else {
+                       return context.getContextParam(name) ;
+                   }
+
                } else {
                    return context.getContextParam(type) ;
                }
            case input:
-               return context.getInputParam(name) ;
+               if (useAlternative) {
+                   return context.getInputParam(name, context.getContextParam(name)) ;
+               } else {
+                   return context.getInputParam(name) ;
+               }
+
            case both:
                return context.getContextParam(name, context.getInputParam(name)) ;
        }
@@ -91,14 +103,14 @@ public class MethodParameter {
     }
 
     public static MethodParameter getContextAsParam() {
-        return new MethodParameter(null, null, Source.self, false, null) ;
+        return new MethodParameter(null, null, Source.self, false, null, false) ;
     }
 
-    public static MethodParameter getContextParam(String name, Class type, boolean isRequired, String defaultValue) {
-        return new MethodParameter(name, type, Source.context, isRequired, defaultValue) ;
+    public static MethodParameter getContextParam(String name, Class type, boolean isRequired, String defaultValue, boolean useInputIfNull) {
+        return new MethodParameter(name, type, Source.context, isRequired, defaultValue, useInputIfNull) ;
     }
 
-    public static MethodParameter getInputParam(String name, Class type, boolean isRequired, String defaultValue) {
-        return new MethodParameter(name, type, Source.input, isRequired, defaultValue) ;
+    public static MethodParameter getInputParam(String name, Class type, boolean isRequired, String defaultValue, boolean useContextIfNull) {
+        return new MethodParameter(name, type, Source.input, isRequired, defaultValue, useContextIfNull) ;
     }
 }

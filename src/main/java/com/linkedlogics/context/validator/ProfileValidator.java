@@ -32,6 +32,11 @@ public class ProfileValidator implements LogicValidator {
     }
 
     @Override
+    public String getName() {
+        return "profile";
+    }
+
+    @Override
     public int getOrder() {
         return 10;
     }

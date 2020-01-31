@@ -2,7 +2,6 @@ package com.linkedlogics;
 
 import com.linkedlogics.config.LinkedLogicsConfiguration;
 import org.springframework.context.annotation.Import;
-import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 

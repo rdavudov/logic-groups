@@ -14,6 +14,12 @@ public class ConditionValidator implements LogicValidator {
         return true ;
     }
 
+
+    @Override
+    public String getName() {
+        return "condition";
+    }
+
     @Override
     public int getOrder() {
         return 30 ;

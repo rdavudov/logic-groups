@@ -5,6 +5,9 @@ import com.linkedlogics.LogicContext;
 import com.linkedlogics.LogicFlowManager;
 import com.linkedlogics.context.executable.AsyncExecutable;
 import com.linkedlogics.context.executable.LogicExecutable;
+import com.linkedlogics.context.execution.ContextExecution;
+import com.linkedlogics.context.execution.ExecutionResult;
+import com.linkedlogics.context.execution.LogicExecution;
 import com.linkedlogics.context.processor.LogicProcessor;
 import com.linkedlogics.context.validator.LogicValidator;
 import com.linkedlogics.exception.*;
@@ -80,6 +83,8 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
     private Set<String> tags = new HashSet<>() ;
 
     private LogicFlowManager flowManager ;
+
+    private ContextExecution executions ;
 
     @Autowired
     public AbstractLogicContext(LogicFlowManager flowManager) {
@@ -356,8 +361,31 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
         item:
         while (iterator.hasNext()) {
             LogicItem item = iterator.next();
-            // We validate action items for conditional, profile, broke execution etc.
-            // Any custom validator can be implemented
+//            LogicExecution execution = new LogicExecution();
+//            execution.setName(item.getName());
+//            execution.setTab(itemStack.size());
+//            // We validate action items for conditional, profile, broke execution etc.
+//            // Any custom validator can be implemented
+//
+//            try {
+//                if (item.getFlag(LogicFlags.IS_DISABLED)) {
+//                    execution.setResult(ExecutionResult.disabled);
+//                }
+//
+//                for (LogicValidator validator : validators) {
+//                    if (!validator.execute(item, this)) {
+//                        execution.setResult(ExecutionResult.skipped);
+//                        continue item;
+//                    }
+//                }
+//
+//            } finally {
+//                execution.setFinished(System.currentTimeMillis());
+//                executions.addExecution(execution);
+//            }
+
+
+
             for (LogicValidator validator : validators) {
                 if (!validator.execute(item, this)) {
                     continue item;
@@ -370,6 +398,7 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
                 Optional<LogicExecutable> executable = flow.getLogic(getNamespaced(item, item.getExecute())) ;
 
                 if (executable.isPresent()) {
+
                     try {
                         log.info("executing logic {}", item.getName());
                         Optional<Map<String, Object>> logicResult = executeLogic(item, executable.get()) ;
@@ -379,6 +408,8 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
                             map.entrySet().forEach((e) -> {
                                 setContextParam(e.getKey(), e.getValue());
                             });
+
+//                            execution.setReturned(map);
                         }
 
                         for (LogicProcessor processor : processors) {
@@ -392,7 +423,10 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
                         if (group.getSelection() == LogicSelection.executeAny) {
                             break item;
                         }
+
+
                     } catch (Throwable ex) {
+//                        execution.setException(ex);
                         LogicSeverity severity = item.getSeverity() ;
 
                         if (ex instanceof LogicException) {
@@ -426,7 +460,9 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
                         for (String errortag : item.getErrortags()) {
                             getTags().add(errortag) ;
                         }
-
+                    } finally {
+//                        execution.setFinished(System.currentTimeMillis());
+//                        executions.addExecution(execution);
                     }
                 } else {
                     throw new MissingLogicException(item.getExecute()) ;
@@ -484,6 +520,7 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
         tags.clear();
         contextId = UUID.randomUUID().toString() ;
         contextTime = System.currentTimeMillis() ;
+        executions = new ContextExecution() ;
         setCancelled(false);
         setBroken(false);
     }

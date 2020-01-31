@@ -30,6 +30,11 @@ public class DefaultLogicGroupBuilder implements LogicGroupBuilder {
         stack.push((LogicGroup) item) ;
     }
 
+    public DefaultLogicGroupBuilder(String name) {
+        item = new LogicGroup(name) ;
+        stack.push((LogicGroup) item) ;
+    }
+
     public DefaultLogicGroupBuilder group(String name) {
         item = new LogicGroup(name) ;
         stack.peek().add(item);

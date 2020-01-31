@@ -14,6 +14,11 @@ public class EnableValidator implements LogicValidator {
     }
 
     @Override
+    public String getName() {
+        return "disable";
+    }
+
+    @Override
     public int getOrder() {
         return 0;
     }

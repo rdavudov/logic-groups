@@ -5,7 +5,9 @@ import com.linkedlogics.flow.LogicItem;
 import org.springframework.core.Ordered;
 
 public interface LogicValidator extends Ordered {
-    public boolean execute(LogicItem item, AbstractLogicContext context) ;
+    boolean execute(LogicItem item, AbstractLogicContext context) ;
+
+    String getName() ;
 
     @Override
     default int getOrder() {

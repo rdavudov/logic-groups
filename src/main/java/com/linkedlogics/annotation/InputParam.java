@@ -12,5 +12,7 @@ public @interface InputParam {
 
     boolean required() default false;
 
+    boolean useContextIfNull() default false ;
+
     String defaultValue() default "" ;
 }

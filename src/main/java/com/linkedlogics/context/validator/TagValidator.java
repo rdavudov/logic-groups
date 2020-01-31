@@ -30,6 +30,11 @@ public class TagValidator implements LogicValidator {
     }
 
     @Override
+    public String getName() {
+        return "tags";
+    }
+
+    @Override
     public int getOrder() {
         return 5;
     }

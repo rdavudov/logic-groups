@@ -1,10 +1,7 @@
 package com.linkedlogics.context.executable;
 
 import com.linkedlogics.LogicContext;
-import com.linkedlogics.annotation.AsyncLogic;
-import com.linkedlogics.annotation.ContextParam;
-import com.linkedlogics.annotation.InputParam;
-import com.linkedlogics.annotation.Logic;
+import com.linkedlogics.annotation.*;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.util.ReflectionUtils;
 
@@ -43,15 +40,15 @@ public class MethodExecutable implements LogicExecutable {
 
             Annotation[] annotations = this.method.getParameterAnnotations()[i] ;
             if (annotations.length == 0) {
-                values[i] = MethodParameter.getContextParam(this.method.getParameterTypes()[i].getSimpleName().toLowerCase(), this.method.getParameterTypes()[i], true, null) ;
+                values[i] = MethodParameter.getContextParam(this.method.getParameterTypes()[i].getSimpleName().toLowerCase(), this.method.getParameterTypes()[i], true, null, false) ;
             } else {
                 for (Annotation annotation : annotations) {
                     if (annotation instanceof ContextParam) {
                         ContextParam param = (ContextParam) annotation ;
-                        values[i] = MethodParameter.getContextParam(param.value(), this.method.getParameterTypes()[i], param.required(), param.defaultValue()) ;
+                        values[i] = MethodParameter.getContextParam(param.value(), this.method.getParameterTypes()[i], param.required(), param.defaultValue(), param.useInputIfNull()) ;
                     } else if (annotation instanceof InputParam) {
                         InputParam param = (InputParam) annotation ;
-                        values[i] = MethodParameter.getInputParam(param.value(), this.method.getParameterTypes()[i], param.required(), param.defaultValue()) ;
+                        values[i] = MethodParameter.getInputParam(param.value(), this.method.getParameterTypes()[i], param.required(), param.defaultValue(), param.useContextIfNull()) ;
                     }
                 }
             }

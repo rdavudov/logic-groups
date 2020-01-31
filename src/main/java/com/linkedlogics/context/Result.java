@@ -2,6 +2,7 @@ package com.linkedlogics.context;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.linkedlogics.context.execution.ContextExecution;
 import com.linkedlogics.exception.LogicException;
 import lombok.Data;
 
@@ -22,6 +23,8 @@ public class Result {
     private Map<String, Object> exported ;
     @JsonIgnore
     private Throwable exception ;
+    @JsonIgnore
+    private ContextExecution execution ;
 
     public Result() {
 

@@ -15,6 +15,11 @@ public class AnchorValidator implements LogicValidator {
     }
 
     @Override
+    public String getName() {
+        return "anchor";
+    }
+
+    @Override
     public int getOrder() {
         return 20;
     }
