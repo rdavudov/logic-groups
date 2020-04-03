@@ -6,6 +6,7 @@ import com.linkedlogics.flow.LogicSelection;
 import com.linkedlogics.flow.LogicSeverity;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public interface LogicGroupBuilder {
     LogicGroupBuilder group(String name) ;
@@ -46,6 +47,28 @@ public interface LogicGroupBuilder {
 
     LogicGroupBuilder fork() ;
 
+//    LogicGroupBuilder join(String... logics) ;
+//
+//    LogicGroupBuilder joinAll() ;
+//
+//    LogicGroupBuilder consume(String... events) ;
+//
+//    LogicGroupBuilder publish(String... events) ;
+//
+//    LogicGroupBuilder wait(String... event) ;
+//
+//    LogicGroupBuilder retry(String interval) ;
+//
+//    LogicGroupBuilder retry(int attempts, int delay, TimeUnit unit) ;
+//
+//    LogicGroupBuilder retryExceptions(Class<? extends Throwable>... classes) ;
+//
+//    LogicGroupBuilder loop(Class<? extends Throwable>... classes) ;
+//
+//    LogicGroupBuilder limits() ;
+    //
+//    LogicGroupBuilder timeout() ;
+
     LogicGroupBuilder anchor() ;
 
     LogicGroupBuilder hidden() ;
@@ -53,6 +76,10 @@ public interface LogicGroupBuilder {
     LogicGroupBuilder input(String key, Object value) ;
 
     LogicGroupBuilder undo(String undo) ;
+
+    default LogicGroupBuilder compensate(String compensate) {
+        return undo(compensate) ;
+    }
 
     LogicGroupBuilder finish() ;
 

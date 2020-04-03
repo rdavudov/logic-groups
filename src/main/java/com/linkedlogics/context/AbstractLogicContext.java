@@ -57,9 +57,9 @@ public abstract class AbstractLogicContext implements LogicContext, ExecutableCo
      * Flow instance being executed
      */
     private LogicFlow flow ;
-    @Autowired
+
     private List<LogicValidator> validators;
-    @Autowired
+
     private List<LogicProcessor> processors;
     /**
      * Time context is updated
