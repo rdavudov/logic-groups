@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LogicAspects {
-    public void go() {
+    public void g2o() {
 
     }
 }
