@@ -16,6 +16,7 @@ public class ContextExecution {
         r.getMap().put("k1", new HashMap<>() {{
             put("k2", "v2") ;
         }}) ;
+        
         ctx.setContextParam("request", r);
         System.out.println(ctx.evaluate("#request.map['k1']['k2']"));
     }
