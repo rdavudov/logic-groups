@@ -1,4 +1,8 @@
-# linked-logics
+# This project is deprecated. Please refer to https://github.com/linkedlogics/linkedlogics 
+
+
+
+## linked-logics
 Chain of Responsibility Design pattern is one of essential methods to develop extensible applications.
 > Avoid coupling the sender of a request to its receiver by giving more than one object a chance to handle the request. Chain the receiving objects and pass the request along the chain until an object handles it. -- Gang of Four
 
